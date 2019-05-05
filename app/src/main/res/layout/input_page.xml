@@ -5,15 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    tools:context=".Main6Activity"
+    tools:context=".InputPage"
     android:padding="80dp"
     android:paddingLeft="180dp"
     android:id="@+id/activity6">
-
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Fill in your Matrix Below!"-->
-        <!--android:textSize="32sp" />-->
-
 </LinearLayout>

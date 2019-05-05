@@ -1,156 +1,141 @@
 package com.example.matrixapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.TextView;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Set;
+import java.util.logging.Logger;
 
-public class MainActivity extends AppCompatActivity {
+public class InputPage extends AppCompatActivity {
 
-    private Button rrefBtn;
-    private Button transposeBtn;
-    private Button mulBtn;
-    private Button addBtn;
+    private static int rowsNum;
+
+    private static int colNum;
+
+    private static double[][] matrix;
+
+    private static List<double[][]> rrefList = new ArrayList<>();
+
+//    private static List<>
+
+    private Logger Log;
+
+    private Button submitBtn;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.input_page);
+        Bundle b = getIntent().getExtras();
+        if (b != null) {
+            try {
+                rowsNum = b.getIntegerArrayList("key").get(0);
+                colNum = b.getIntegerArrayList("key").get(1);
+            } catch (NullPointerException ex) {
+                Log.info("Error retrieving matrix size list");
+            }
+        }
 
-        rrefBtn = (Button) findViewById(R.id.rrefBtn);
-        rrefBtn.setOnClickListener(new View.OnClickListener() {
+        LinearLayout linearLayout = new LinearLayout(this);
+        linearLayout.setOrientation(LinearLayout.VERTICAL);
+        TextView textView = new TextView(this);
+        textView.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+        textView.setText("Fill in your Matrix Below!");
+        linearLayout.addView(textView);
+
+
+
+        for (int s=0; s<rowsNum; s++) {
+            LinearLayout row = new LinearLayout(this);
+            row.setLayoutParams(new ViewGroup.LayoutParams(ViewGroup.LayoutParams.FILL_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
+
+            for (int t=0; t<colNum; t++) {
+                EditText temp = new EditText(this);
+                temp.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT,
+                        LinearLayout.LayoutParams.WRAP_CONTENT));
+
+                StringBuilder stringBuilder = new StringBuilder();
+                stringBuilder.append(s);
+                String mid = Integer.toString(999);
+                stringBuilder.append(mid);
+                stringBuilder.append(t);
+                int id = Integer.parseInt(stringBuilder.toString());
+                temp.setId(t);
+                temp.setHint("0");
+
+                row.addView(temp);
+                row.setId(s);
+            }
+
+            linearLayout.addView(row);
+        }
+
+        Button btn = new Button(this);
+        btn.setLayoutParams(new ViewGroup.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+                RelativeLayout.LayoutParams.WRAP_CONTENT));
+        btn.setText("Submit!");
+        linearLayout.addView(btn);
+        setContentView(linearLayout);
+
+        btn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivity2();
+                matrix = new double[rowsNum][colNum];
+
+                for (int t=0; t<colNum; t++) {
+                    for (int s = 0; s < rowsNum; s++) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append(s);
+                        String mid = Integer.toString(999);
+                        stringBuilder.append(mid);
+                        stringBuilder.append(t);
+                        int id = Integer.parseInt(stringBuilder.toString());
+                        EditText temp = findViewById(id);
+                        matrix[s][t] = Double.parseDouble(temp.getText().toString().trim());
+                    }
+                }
+                double[][] solved = rref(matrix);
+                for (int t=0; t<colNum; t++) {
+                    for (int s = 0; s < rowsNum; s++) {
+                        StringBuilder stringBuilder = new StringBuilder();
+                        stringBuilder.append(s);
+                        String mid = Integer.toString(999);
+                        stringBuilder.append(mid);
+                        stringBuilder.append(t);
+                        int id = Integer.parseInt(stringBuilder.toString());
+                        EditText temp = findViewById(id);
+                        String text = Double.toString(solved[s][t]);
+                        temp.setText(text);
+                    }
+                }
             }
         });
 
-        transposeBtn = (Button) findViewById(R.id.transposeBtn);
-        transposeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivity3();
-            }
-        });
-
-        mulBtn = findViewById(R.id.mulBtn);
-        mulBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivity4();
-            }
-        });
-
-        addBtn = findViewById(R.id.addBtn);
-        addBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                openActivity5();
-            }
-        });
-    }
-
-    public void openActivity2() {
-        Intent intent = new Intent(this, Main2Activity.class);
-        startActivity(intent);
-    }
-
-    public void openActivity3() {
-        Intent intent = new Intent(this, Main3Activity.class);
-        startActivity(intent);
-
-    }
-
-    public void openActivity4() {
-        Intent intent = new Intent(this, Main4Activity.class);
-        startActivity(intent);
-
-    }
-
-    public void openActivity5() {
-        Intent intent = new Intent(this, Main5Activity.class);
-        startActivity(intent);
-
     }
 
 
-
-    public static boolean isInvalid = false;
-
-    private static List<double[][]> rrefList = new ArrayList<>();
 
 
 /*    =====================================================
-      MATRIX MULTIPLICATION
+      RREF OF MATRIX
  */
-
-    private static double[][] matrixMultiplier(double[][] A, double[][] B) {
-        if (A.length != B[0].length || A[0].length != B.length) {
-
-            return null;
-        }
-        double[][] C = new double[A.length][B[0].length];
-
-        List<double[]> arrBList = new ArrayList<>();
-        for (int t = 0; t < B[0].length; t++) {
-            double[] arrB = new double[B.length];
-            for (int s = 0; s < B.length; s++) {
-
-                arrB[s] = B[s][t];
-
-            }
-            arrBList.add(arrB);
-        }
-
-        for (int t = 0; t < B[0].length; t++) {
-            for (int s = 0; s < A.length; s++) {
-                double[] arrA = A[s];
-//                double[] arrB = new double[B.length];
-                C[s][t] = dotProduct(arrA, arrBList.get(t));
-            }
-        }
-        return C;
-    }
-
-    //      Make this a lambda function
-    private static double dotProduct(double[] arrA, double[] arrB) {
-        int dotProduct = 0;
-        List<Double> doubleList = new ArrayList<>();
-        for (int i = 0; i < arrA.length; i++) {
-            doubleList.add(arrA[i] * arrB[i]);
-        }
-        for (double d : doubleList) {
-            dotProduct += d;
-        }
-        return dotProduct;
-    }
-
-
-/*    =====================================================
-      MATRIX ADDITION AND SUBTRACTION
- */
-
-    private static double[][] matrixAddSub(double[][] A, double[][] B, char operation) {
-//        Both A and B must be the same size
-        if (A.length != B.length || A[0].length != B[0].length) {
-            isInvalid = true;
-            return null;
-        }
-        double[][] C = new double[A.length][A[0].length];
-        for (int t = 0; t < C[0].length; t++) {
-            for (int s = 0; s < C.length; s++) {
-                if (operation == '+')
-                    C[s][t] = A[s][t] + B[s][t];
-                else if (operation == '-')
-                    C[s][t] = A[s][t] - B[s][t];
-            }
-        }
-        return C;
-    }
 
     private static boolean isUnique(double[][] rref) {
         Set<double[][]> rrefSet = new HashSet<>(rrefList);
@@ -169,10 +154,6 @@ public class MainActivity extends AppCompatActivity {
         return rref;
     }
 
-
-/*    =====================================================
-      RREF OF MATRIX
- */
 
     private static double[][] orderMatrixRows(double[][] matrix) {
         List<double[]> rows = new ArrayList<>();
@@ -294,28 +275,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-/*    =====================================================
-      TRANSPOSE OF THE MATRIX
- */
 
-    private static double[][] transpose(double[][] matrix) {
-        List<double[]> doubList = new ArrayList<>();
-        int i = matrix.length;
-        int j = matrix[0].length;
-        double[][] transpose = new double[j][i];
-        for (int t = 0; t < j; t++) {
-            double[] doub = new double[i];
-            for (int s = 0; s < i; s++) {
-                doub[s] = matrix[s][t];
-            }
-            doubList.add(doub);
-
-        }
-
-        for (int s = 0; s < j; s++) {
-            transpose[s] = doubList.get(s);
-        }
-        return transpose;
-
-    }
 }
+
+
