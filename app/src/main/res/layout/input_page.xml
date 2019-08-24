@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity6"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="80dp"
+    android:paddingLeft="180dp"
+    tools:context=".InputPage">
+
+
+    <Button
+        android:id="@+id/rrefSubmit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="80dp"
+        android:layout_marginTop="420dp"
+        android:backgroundTint="#AE03A9F4"
+        android:text="Row Reduce"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:layout_conversion_wrapHeight="126"
+        tools:layout_conversion_wrapWidth="231" />
+
+</android.support.constraint.ConstraintLayout>

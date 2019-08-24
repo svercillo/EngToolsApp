@@ -1,6 +1,5 @@
 package com.example.matrixapp;
 
-import android.app.Activity;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,7 +8,7 @@ import android.widget.Button;
 
 import java.util.*;
 
-public class MainActivity extends AppCompatActivity {
+public class HomePage extends AppCompatActivity {
 
     private Button rrefBtn;
     private Button transposeBtn;
@@ -19,13 +18,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.home_page);
 
         rrefBtn = (Button) findViewById(R.id.rrefBtn);
         rrefBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivity2();
+                openMatrixSizer();
             }
         });
 
@@ -54,8 +53,8 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    public void openActivity2() {
-        Intent intent = new Intent(this, Main2Activity.class);
+    public void openMatrixSizer() {
+        Intent intent = new Intent(this, MatrixSizer.class);
         startActivity(intent);
     }
 
@@ -152,6 +151,11 @@ public class MainActivity extends AppCompatActivity {
         return C;
     }
 
+
+/*    =====================================================
+      RREF OF MATRIX
+ */
+
     private static boolean isUnique(double[][] rref) {
         Set<double[][]> rrefSet = new HashSet<>(rrefList);
         return rrefSet.size() == rrefList.size();
@@ -169,10 +173,6 @@ public class MainActivity extends AppCompatActivity {
         return rref;
     }
 
-
-/*    =====================================================
-      RREF OF MATRIX
- */
 
     private static double[][] orderMatrixRows(double[][] matrix) {
         List<double[]> rows = new ArrayList<>();

@@ -8,46 +8,48 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 
 /*    =====================================================
       RREF OF MATRIX OR TRANSPOSE
  */
-public class Main2Activity extends AppCompatActivity {
+public class MatrixSizer extends AppCompatActivity {
 
     private Button submitDimBtn;
-    private TextView input;
-
+    private TextView rows;
+    private TextView col;
     private static String rowsAndCols;
+    private static String Cols;
     public static boolean isInvalid;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main2);
+        setContentView(R.layout.matrix_sizer);
 
         submitDimBtn = findViewById(R.id.submitDimsBtn);
-        input = findViewById(R.id.rowsAndCol_input);
+
+        rows = findViewById(R.id.rowsAndCol_input);
 
         submitDimBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rowsAndCols = input.getText().toString().trim();
-                openActivity6();
+                rowsAndCols = rows.getText().toString().trim();
+                openInputPage();
             }
         });
     }
 
 
-    public void openActivity6() {
-        Intent intent = new Intent(this, Main6Activity.class);
+    public void openInputPage() {
+        Intent intent = new Intent(this, InputPage.class);
         Bundle b = new Bundle();
         b.putIntegerArrayList("key", matrixSize());
         intent.putExtras(b);
         startActivity(intent);
     }
 
+//    Takes the user input of the size of the desired matrix
     public static ArrayList<Integer> matrixSize (){
         String string = rowsAndCols;
         ArrayList<Integer> list = new ArrayList<>();
@@ -63,11 +65,4 @@ public class Main2Activity extends AppCompatActivity {
         return list;
 
     }
-
-
-
-
-
-
-
 }
