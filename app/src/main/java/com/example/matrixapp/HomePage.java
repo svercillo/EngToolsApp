@@ -24,7 +24,7 @@ public class HomePage extends AppCompatActivity {
         rrefBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                openActivity2();
+                openMatrixSizer();
             }
         });
 
@@ -53,7 +53,7 @@ public class HomePage extends AppCompatActivity {
         });
     }
 
-    public void openActivity2() {
+    public void openMatrixSizer() {
         Intent intent = new Intent(this, MatrixSizer.class);
         startActivity(intent);
     }

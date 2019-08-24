@@ -16,9 +16,10 @@ import java.util.ArrayList;
 public class MatrixSizer extends AppCompatActivity {
 
     private Button submitDimBtn;
-    private TextView input;
-
+    private TextView rows;
+    private TextView col;
     private static String rowsAndCols;
+    private static String Cols;
     public static boolean isInvalid;
 
     @Override
@@ -27,19 +28,20 @@ public class MatrixSizer extends AppCompatActivity {
         setContentView(R.layout.matrix_sizer);
 
         submitDimBtn = findViewById(R.id.submitDimsBtn);
-        input = findViewById(R.id.rowsAndCol_input);
+
+        rows = findViewById(R.id.rowsAndCol_input);
 
         submitDimBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                rowsAndCols = input.getText().toString().trim();
-                openActivity6();
+                rowsAndCols = rows.getText().toString().trim();
+                openInputPage();
             }
         });
     }
 
 
-    public void openActivity6() {
+    public void openInputPage() {
         Intent intent = new Intent(this, InputPage.class);
         Bundle b = new Bundle();
         b.putIntegerArrayList("key", matrixSize());
@@ -47,6 +49,7 @@ public class MatrixSizer extends AppCompatActivity {
         startActivity(intent);
     }
 
+//    Takes the user input of the size of the desired matrix
     public static ArrayList<Integer> matrixSize (){
         String string = rowsAndCols;
         ArrayList<Integer> list = new ArrayList<>();

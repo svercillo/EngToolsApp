@@ -32,17 +32,28 @@ public class InputPage extends AppCompatActivity {
 
     private static List<double[][]> rrefList = new ArrayList<>();
 
-//    private static List<>
-
     private Logger Log;
 
-    private Button submitBtn;
+    private Button rrefSubmit;
+
+    private Button transposeSubmit;
+
+//        rrefSubmit = (Button) findViewById(R.id.rrefSubmit );
+//        rrefSubmit.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                openrref();
+//            }
+//        });
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.input_page);
+
+
+
         Bundle b = getIntent().getExtras();
         if (b != null) {
             try {
@@ -87,14 +98,14 @@ public class InputPage extends AppCompatActivity {
             linearLayout.addView(row);
         }
 
-        Button btn = new Button(this);
-        btn.setLayoutParams(new ViewGroup.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
+        Button submitBtn = new Button(this);
+        submitBtn.setLayoutParams(new ViewGroup.LayoutParams(RelativeLayout.LayoutParams.WRAP_CONTENT,
                 RelativeLayout.LayoutParams.WRAP_CONTENT));
-        btn.setText("Submit!");
-        linearLayout.addView(btn);
+        submitBtn.setText("Submit !");
+        linearLayout.addView(submitBtn);
         setContentView(linearLayout);
 
-        btn.setOnClickListener(new View.OnClickListener() {
+        submitBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 matrix = new double[rowsNum][colNum];
@@ -111,6 +122,7 @@ public class InputPage extends AppCompatActivity {
                         matrix[s][t] = Double.parseDouble(temp.getText().toString().trim());
                     }
                 }
+
                 double[][] solved = rref(matrix);
                 for (int t=0; t<colNum; t++) {
                     for (int s = 0; s < rowsNum; s++) {
@@ -130,7 +142,48 @@ public class InputPage extends AppCompatActivity {
 
     }
 
+//    public void nullCheck (){
+//        for (int t=0; t<colNum; t++) {
+//            for (int s = 0; s < rowsNum; s++) {
+//                if (matrix[s][t] == null){
+//
+//                }
+//            }
+//        }
+//    }
+//    public void openrref() {
+//        Intent intent = new Intent(this, InputPage.class);
+//        Bundle b = new Bundle();
+//        b.putIntegerArrayList("key", matrixSize());
+//        intent.putExtras(b);
+//        startActivity(intent);
+//    }
 
+
+    /*    =====================================================
+      TRANSPOSE OF THE MATRIX
+ */
+
+    private static double[][] transpose(double[][] matrix) {
+        List<double[]> doubList = new ArrayList<>();
+        int i = matrix.length;
+        int j = matrix[0].length;
+        double[][] transpose = new double[j][i];
+        for (int t = 0; t < j; t++) {
+            double[] doub = new double[i];
+            for (int s = 0; s < i; s++) {
+                doub[s] = matrix[s][t];
+            }
+            doubList.add(doub);
+
+        }
+
+        for (int s = 0; s < j; s++) {
+            transpose[s] = doubList.get(s);
+        }
+        return transpose;
+
+    }
 
 
 /*    =====================================================
@@ -273,9 +326,6 @@ public class InputPage extends AppCompatActivity {
         }
         return hashMap;
     }
-
-
-
 }
 
 
