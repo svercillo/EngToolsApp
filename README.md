@@ -7,6 +7,4 @@ Provides a number of different matrix calculations in including RREF, transpose,
 
 In addition it is to include a regular calculator and a chemical equation balancer.
 
-This is not the finized product as some features are still in development and been pushed ASAP
-
 
