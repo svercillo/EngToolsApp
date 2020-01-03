@@ -1,4 +1,4 @@
-# EngToolsApp-beta-
+# EngToolsApp
 
 
 My name is Stefan Vercillo and I'm a 1B computer Eng student at the University of Waterloo. This app is "EngTools" essentially makes a number of complex math and science functions easily accessible for the user.
